@@ -16,35 +16,32 @@ int main() {
 	}
 
 	auto n = 0;
-	for (auto i = 25; i < lines.size(); ++i) {
+	for (auto i = lines.begin() + 25; i != lines.end(); ++i) {
 		auto ok = false;
-		for (auto j = i-25; j < i; ++j) {
-			for (auto k = j; k < i; ++k) {
-				if (lines[j] + lines[k] == lines[i])
+		for (auto j = i-25; j != i; ++j) {
+			for (auto k = j; k != i; ++k) {
+				if (*j + *k == *i)
 					ok = true;
 			}
 		}
 		if (!ok) {
-			cout << lines[i] << endl;
-			n = lines[i];
+			cout << *i << endl;
+			n = *i;
 		}
 	}
 
 	auto q = 0, best = 0;
-	for (auto i = 0; i < lines.size(); ++i) {
-		for (auto j = i+1; j < lines.size(); ++j) {
-			auto sum = accumulate(lines.begin()+i, lines.begin()+j, 0);
-			unsigned long ma = *max_element(lines.begin()+i, lines.begin()+j);
-			unsigned long mi = *min_element(lines.begin()+i, lines.begin()+j);
-			/*
-			for (auto k = i; k <= j; k++) {
-				x = min(x, lines[k]);
-				y = max(y, lines[k]);
-				sum += lines[k];
-			}
-			*/
-			if (sum == n && ((j-i+1) > best)) {
-				best = ((j-i+1));
+	for (auto i = lines.begin(); i != lines.end(); ++i) {
+		auto sum = 0;
+		auto ma = *i;
+		auto mi = *i;
+		for (auto j = i+1; j != lines.end(); ++j) {
+			sum += *j;
+			ma = max(ma, *j);
+			mi = min(mi, *j);
+
+			if (sum == n && j-i > best) {
+				best = j-i;
 				q = ma + mi;
 			}
 		}
